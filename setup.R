@@ -3,7 +3,7 @@ library(dplyr)
 
 #### Falls die Daten aus einem Googlesheet kommen ####
 # Wenn die Daten von woanders kommen variiert das selbstverständlich
-# z.B. Social Science Survey (https://www.soscisurvey.de/) liefert den setup teil für R mit
+# z.B. Social Science Survey (https://www.soscisurvey.de/) liefert den setup Teil für R mit
 # dann müsst ihr den Code erst ab Zeile 22 ausführen
 library(googlesheets)
 
