@@ -1,0 +1,123 @@
+---
+title: "Auswertung"
+author: "Annika Overlander & Gesa Graf"
+date: "Stand `r format(Sys.time(), '%F %H:%M')`"
+output:
+  html_document:
+    code_folding: hide
+    highlight: kate
+    theme: sandstone
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#librarys
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(dplyr)
+
+source("theme_me.R")
+theme_set(theme_me())
+
+# data
+neo <- readRDS("NEOFFI.rds")
+```
+
+#{.tabset}
+
+## Rohtestwert
+
+```{r warning=FALSE}
+neo_long_2 <- neo[63:67] %>% gather(was, value)
+
+neo_long_2$was <- recode(neo_long_2$was,
+                         `neuro_raw` = "Neurotizismus" ,
+                         `gewiss_raw` = "Gewissenhaftigkeit",
+                         "vertr_raw" = "Verträglichkeit",
+                         "offen_raw" = "Offenheit",
+                         `extra_raw` = "Extraversion"
+)
+
+
+ggplot(neo_long_2, aes(x = value, fill = was)) +
+  geom_bar() +
+  scale_fill_viridis(discrete = T, guide = F, option = "A", end = .8) +
+  facet_wrap(~was, strip.position = "bottom") +
+  labs(title = "NEO-FFI (Rohtestwert)",
+       subtitle = "So siehts hier aus",
+       y = "Häufigkeit",
+       x = "Ausprägung") 
+```
+
+## Fragen
+
+```{r warning=FALSE}
+neo_long_3 <- neo[68:72] %>% gather(was, value)
+
+neo_long_3$was <- recode(neo_long_3$was,
+                         `quest_n` = "Neurotizismus" ,
+                         "quest_g" = "Gewissenhaftigkeit",
+                         "quest_v" = "Verträglichkeit",
+                         "quest_o" = "Offenheit",
+                         "quest_e" = "Extraversion"
+)
+
+ggplot(neo_long_3, aes(x = value, fill = was)) +
+  geom_bar() +
+  scale_fill_viridis(discrete = T, guide = F, option = "B", end = .8) +
+  facet_wrap(~was, strip.position = "bottom") +
+  labs(title = "Beantwortete Fragen (pro Dimension)",
+       subtitle = "So siehts hier aus",
+       y = "Häufigkeit",
+       x = "Ausprägung") +
+  scale_x_continuous(breaks = 0:12)
+```
+
+## Teiltestwert
+
+```{r warning=FALSE}
+neo_long <- neo[73:77] %>% gather(was, value)
+
+neo_long$was <- recode(neo_long$was,
+                       `neu` = "Neurotizismus" ,
+                       `gew` = "Gewissenhaftigkeit",
+                       "ver" = "Verträglichkeit",
+                       "off" = "Offenheit",
+                       `ext` = "Extraversion"
+)
+
+ggplot(neo_long, aes(x = value, fill = was)) +
+  geom_bar() +
+  scale_fill_viridis(discrete = T, guide = F, option = "C") +
+  facet_wrap(~was, strip.position = "bottom") +
+  labs(title = "NEO-FFI (Gemittelter Testwert)",
+       subtitle = "So siehts hier aus",
+       y = "Häufigkeit",
+       x = "Ausprägung")
+```
+
+## Testwert
+
+```{r}
+neo_long_4 <- neo[78:82] %>% gather(was, value)
+
+neo_long_4$was <- recode(neo_long_4$was,
+                       `neuro` = "Neurotizismus" ,
+                       `gewiss` = "Gewissenhaftigkeit",
+                       "vertr" = "Verträglichkeit",
+                       "offen" = "Offenheit",
+                       `extra` = "Extraversion"
+)
+
+ggplot(neo_long_4, aes(x = value, fill = was)) +
+  geom_bar() +
+  scale_fill_viridis(discrete = T, guide = F, option = "D") +
+  facet_wrap(~was, strip.position = "bottom") +
+  labs(title = "NEO-FFI (Gesamttestwert)",
+       subtitle = "So siehts hier aus",
+       y = "Häufigkeit",
+       x = "Ausprägung")
+```
+
